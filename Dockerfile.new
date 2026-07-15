@@ -1,0 +1,27 @@
+FROM public.ecr.aws/docker/library/node:22.22.1-slim
+
+# Atualizar npm para versão mais recente
+RUN npm install -g npm@latest --loglevel=error
+
+# Instalar curl para health checks
+RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /usr/src/app
+
+# Instalar dependências do backend
+COPY package*.json ./
+RUN npm install --loglevel=error
+
+# Instalar dependências do frontend
+COPY client/package*.json ./client/
+RUN cd client && npm install --legacy-peer-deps --loglevel=error
+
+# Copiar todo o código fonte
+COPY . .
+
+# Build do frontend com Vite
+RUN cd client && npm run build --loglevel=error
+
+EXPOSE 8080
+
+CMD ["npm", "start"]

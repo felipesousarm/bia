@@ -18,7 +18,7 @@ AWS_REGION="us-east-1"
 BUILD_DIR="build"
 
 # URL da API / Backend
-API_URL="http://3.91.200.133"
+API_URL=$(grep 'VITE_API_URL=' ../Dockerfile | sed -E 's/.*VITE_API_URL=([^ ]+).*/\1/')
 
 # Perfil AWS SSO
 AWS_PROFILE="formacao"

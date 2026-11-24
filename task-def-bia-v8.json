@@ -1,0 +1,72 @@
+{
+  "containerDefinitions": [
+    {
+      "name": "bia",
+      "image": "214057697400.dkr.ecr.us-east-1.amazonaws.com/bia@sha256:0b7c217f3b3aad89208c884bf7cd34ec4c270bbd830133620e4d54047a2737cb",
+      "cpu": 0,
+      "memoryReservation": 410,
+      "portMappings": [
+        {
+          "containerPort": 8080,
+          "hostPort": 0,
+          "protocol": "tcp",
+          "name": "porta-80",
+          "appProtocol": "http"
+        }
+      ],
+      "essential": true,
+      "environment": [
+        {
+          "name": "DB_PWD",
+          "value": "EntGvrEqQAlyutqetaCt"
+        },
+        {
+          "name": "DB_HOST",
+          "value": "bia.cyj2awkeoxzi.us-east-1.rds.amazonaws.com"
+        },
+        {
+          "name": "DB_PORT",
+          "value": "5432"
+        },
+        {
+          "name": "DB_USER",
+          "value": "postgres"
+        }
+      ],
+      "mountPoints": [],
+      "volumesFrom": [],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/tark-def-bia-alb",
+          "awslogs-create-group": "true",
+          "awslogs-region": "us-east-1",
+          "awslogs-stream-prefix": "ecs"
+        }
+      },
+      "healthCheck": {
+        "command": [
+          "CMD-SHELL",
+          "curl -f http://localhost:8080/api/versao || exit 1"
+        ],
+        "interval": 30,
+        "timeout": 5,
+        "retries": 3,
+        "startPeriod": 60
+      },
+      "systemControls": []
+    }
+  ],
+  "family": "tark-def-bia-alb",
+  "executionRoleArn": "arn:aws:iam::214057697400:role/ecsTaskExecutionRole",
+  "networkMode": "bridge",
+  "volumes": [],
+  "placementConstraints": [],
+  "runtimePlatform": {
+    "cpuArchitecture": "X86_64",
+    "operatingSystemFamily": "LINUX"
+  },
+  "requiresCompatibilities": [
+    "EC2"
+  ]
+}
